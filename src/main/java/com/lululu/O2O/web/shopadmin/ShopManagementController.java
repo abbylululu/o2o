@@ -3,7 +3,9 @@ package com.lululu.O2O.web.shopadmin;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +22,14 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lululu.O2O.dto.ShopExecution;
+import com.lululu.O2O.entity.Area;
 import com.lululu.O2O.entity.PersonInfo;
 import com.lululu.O2O.entity.Shop;
+import com.lululu.O2O.entity.ShopCategory;
 import com.lululu.O2O.enums.ShopStateEnum;
 import com.lululu.O2O.exceptions.ShopOperationException;
+import com.lululu.O2O.service.AreaService;
+import com.lululu.O2O.service.ShopCategoryService;
 import com.lululu.O2O.service.ShopService;
 import com.lululu.O2O.util.HttpServletRequestUtil;
 import com.lululu.O2O.util.ImageUtil;
@@ -35,6 +41,34 @@ public class ShopManagementController {
 
 	@Autowired
 	private ShopService shopService;
+	
+	@Autowired
+	private ShopCategoryService shopCategoryService;
+	
+	@Autowired
+	private AreaService areaService;
+	
+	@RequestMapping(value = "/getshopinitinfo", method = RequestMethod.GET)
+	@ResponseBody
+	private Map<String, Object> getShopInitInfo() {
+		
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+		List<ShopCategory> shopCategoryList = new ArrayList<ShopCategory>();
+		List<Area> areaList = new ArrayList<Area>();
+		
+		try {
+			shopCategoryList = shopCategoryService.getShopCategoryList(new ShopCategory());
+			areaList = areaService.getAreaList();
+			modelMap.put("shopCategoryList", shopCategoryList);
+			modelMap.put("areaList", areaList);
+			modelMap.put("success", true);
+		} catch(Exception e) {
+			modelMap.put("success", false);
+			modelMap.put("errMsg", e.getMessage());
+		}
+		
+		return modelMap;
+	}
 	
 	@RequestMapping(value = "/registershop", method = RequestMethod.POST)
 	@ResponseBody
