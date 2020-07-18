@@ -22,7 +22,7 @@ public class Shop {
 
 		private Date lastEditTime;
 		
-		// -1.not enabled 0.judging 1.enabled
+		// -1.not enabled 0.verifying 1.enabled
 		private Integer enableStatus;
 
 		private String advice;
