@@ -23,6 +23,7 @@ import com.lululu.O2O.dto.ShopExecution;
 import com.lululu.O2O.entity.PersonInfo;
 import com.lululu.O2O.entity.Shop;
 import com.lululu.O2O.enums.ShopStateEnum;
+import com.lululu.O2O.exceptions.ShopOperationException;
 import com.lululu.O2O.service.ShopService;
 import com.lululu.O2O.util.HttpServletRequestUtil;
 import com.lululu.O2O.util.ImageUtil;
@@ -75,29 +76,21 @@ public class ShopManagementController {
 			owner.setUserId(1L);
 			shop.setOwner(owner);
 			
-			// change multiPartFile to File
-			File shopImgFile = new File(PathUtil.getImgBasePath() + ImageUtil.getRandomFileName());
+			ShopExecution se;
 			try {
-				shopImgFile.createNewFile();
+				se = shopService.addShop(shop, shopImg.getInputStream(), shopImg.getOriginalFilename());
+				if (se.getState() == ShopStateEnum.CHECK.getState()) {
+					modelMap.put("success", true);
+				} else {
+					modelMap.put("success", false);
+					modelMap.put("errMsg", se.getStateInfo());
+				}
+			} catch (ShopOperationException e) {
+				modelMap.put("success", false);
+				modelMap.put("errMsg", e.getMessage());
 			} catch (IOException e) {
 				modelMap.put("success", false);
 				modelMap.put("errMsg", e.getMessage());
-				return modelMap;
-			}
-			try {
-				inputStreamToFile(shopImg.getInputStream(), shopImgFile);
-			} catch (IOException e) {
-				modelMap.put("success", false);
-				modelMap.put("errMsg", e.getMessage());
-				return modelMap;
-			}
-			
-			ShopExecution se = shopService.addShop(shop, shopImgFile);
-			if (se.getState() == ShopStateEnum.CHECK.getState()) {
-				modelMap.put("success", true);
-			} else {
-				modelMap.put("success", false);
-				modelMap.put("errMsg", se.getStateInfo());
 			}
 			return modelMap;
 			
@@ -109,31 +102,31 @@ public class ShopManagementController {
 		
 	}
 	
-	private static void inputStreamToFile(InputStream inputStream, File file) {
-		
-		FileOutputStream os = null;
-		try {
-			os = new FileOutputStream(file);
-			int bytesRead = 0;
-			byte[] buffer = new byte[1024];
-			while ((bytesRead = inputStream.read(buffer)) != -1) {
-				os.write(buffer, 0, bytesRead);
-			}
-		} catch(Exception e) {
-			throw new RuntimeException("error when calling inputStreamToFile: " + e.getMessage());
-		} finally {
-			try {
-				if (os != null) {
-					os.close();
-				}
-				if (inputStream != null) {
-					inputStream.close();
-				}
-			} catch(IOException e) {
-				throw new RuntimeException("error when closing io in calling inputStreamToFile" + e.getMessage());
-			}
-		}
-		
-	}
+//	private static void inputStreamToFile(InputStream inputStream, File file) {
+//		
+//		FileOutputStream os = null;
+//		try {
+//			os = new FileOutputStream(file);
+//			int bytesRead = 0;
+//			byte[] buffer = new byte[1024];
+//			while ((bytesRead = inputStream.read(buffer)) != -1) {
+//				os.write(buffer, 0, bytesRead);
+//			}
+//		} catch(Exception e) {
+//			throw new RuntimeException("error when calling inputStreamToFile: " + e.getMessage());
+//		} finally {
+//			try {
+//				if (os != null) {
+//					os.close();
+//				}
+//				if (inputStream != null) {
+//					inputStream.close();
+//				}
+//			} catch(IOException e) {
+//				throw new RuntimeException("error when closing io in calling inputStreamToFile" + e.getMessage());
+//			}
+//		}
+//		
+//	}
 	
 }

@@ -1,6 +1,7 @@
 package com.lululu.O2O.service.impl;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ShopServiceImpl implements ShopService {
 	
 	@Override
 	@Transactional
-	public ShopExecution addShop(Shop shop, File shopImg) {
+	public ShopExecution addShop(Shop shop, InputStream shopImgInputStream, String fileName) throws ShopOperationException {
 		
 		// verify whether shop has null fields
 		if (shop == null) {
@@ -43,10 +44,10 @@ public class ShopServiceImpl implements ShopService {
 				throw new ShopOperationException("failed to add the shop");
 			}
 			else {
-				if (shopImg != null) {
+				if (shopImgInputStream != null) {
 					// store the img
 					try {
-						addShopImg(shop, shopImg);		
+						addShopImg(shop, shopImgInputStream, fileName);		
 					} catch (Exception e) {
 						throw new ShopOperationException("add shopImg error" + e.getMessage());
 					}
@@ -65,11 +66,11 @@ public class ShopServiceImpl implements ShopService {
 		return new ShopExecution(ShopStateEnum.CHECK, shop);
 	}
 
-	private void addShopImg(Shop shop, File shopImg) {
+	private void addShopImg(Shop shop, InputStream shopImgInputStream, String fileName) {
 		
 		// get shop image relative path
 		String dest = PathUtil.getShopImagePath(shop.getShopId());
-		String shopImgAddr = ImageUtil.generateThumbnail(shopImg, dest);
+		String shopImgAddr = ImageUtil.generateThumbnail(shopImgInputStream, fileName, dest);
 		shop.setShopImg(shopImgAddr);
 		
 	}

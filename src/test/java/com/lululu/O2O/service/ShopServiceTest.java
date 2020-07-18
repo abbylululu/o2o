@@ -3,6 +3,9 @@ package com.lululu.O2O.service;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Date;
 
 import org.junit.Test;
@@ -22,7 +25,7 @@ public class ShopServiceTest extends BaseTest {
 	private ShopService shopService;
 	
 	@Test
-	public void testAddShop() {
+	public void testAddShop() throws FileNotFoundException {
 		
 		Shop shop = new Shop();
 		
@@ -37,16 +40,17 @@ public class ShopServiceTest extends BaseTest {
 		shop.setOwner(owner);
 		shop.setArea(area);
 		shop.setShopCategory(shopCategory);
-		shop.setShopName("Test Shop???");
-		shop.setShopDesc("test111");
-		shop.setShopAddr("test111");
-		shop.setPhone("test111");
+		shop.setShopName("Test Shop3");
+		shop.setShopDesc("test3");
+		shop.setShopAddr("test3");
+		shop.setPhone("test3");
 		shop.setCreateTime(new Date());
 		shop.setEnableStatus(ShopStateEnum.CHECK.getState());
 		shop.setAdvice("verifying");
 	
 		File shopImg = new File("/Users/lululumi/Pictures/cloud.jpg");
-		ShopExecution se = shopService.addShop(shop, shopImg);
+		InputStream is = new FileInputStream(shopImg);
+		ShopExecution se = shopService.addShop(shop, is, shopImg.getName());
 		assertEquals(ShopStateEnum.CHECK.getState(), se.getState());
 		
 	}
