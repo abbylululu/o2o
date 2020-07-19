@@ -53,9 +53,18 @@ $(function() {
 		var formData = new FormData();
 		formData.append('shopImg', shopImg);
 		formData.append('shopStr', JSON.stringify(shop));
+		// append the captcha
+		var verifyCodeActual = $('#j_captcha').val();
+		/*console.log(verifyCodeActual);*/
+		
+		if (!verifyCodeActual) {
+			$.toast("Please enter Captcha!");
+			return;
+		}
+		formData.append('verifyCodeActual', verifyCodeActual);
 		
 		$.ajax({
-			url : (isEdit ? editShopUrl : registerShopUrl),
+			url : registerShopUrl,
 			type : 'POST',
 			data : formData,
 			contentType : false,
@@ -67,6 +76,8 @@ $(function() {
 				} else {
 					$.toast('submit failed！' + data.errMsg);
 				}
+				// update the captcha after submitting
+				$('#captcha_img').click();
 			}
 		});
 	});

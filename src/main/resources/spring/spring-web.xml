@@ -25,6 +25,13 @@
 		<property name="prefix" value="/WEB-INF/html/"></property> <!-- 用WEB-INF来保证外界不能直接输入文件名进行访问 -->
 		<property name="suffix" value=".html"></property>
 	</bean>
+	
+	<!-- 为解决form里有文件流，文件上传解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8"></property>
+		<property name="maxUploadSize" value="20971520"></property> <!-- 20M -->
+		<property name="maxInMemorySize" value="20971520"></property>
+	</bean>
 
 	<!-- 4.扫描web相关的bean -->
 	<context:component-scan base-package="com.lululu.O2O.web" />

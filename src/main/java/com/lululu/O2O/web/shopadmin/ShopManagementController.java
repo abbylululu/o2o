@@ -31,6 +31,7 @@ import com.lululu.O2O.exceptions.ShopOperationException;
 import com.lululu.O2O.service.AreaService;
 import com.lululu.O2O.service.ShopCategoryService;
 import com.lululu.O2O.service.ShopService;
+import com.lululu.O2O.util.CodeUtil;
 import com.lululu.O2O.util.HttpServletRequestUtil;
 import com.lululu.O2O.util.ImageUtil;
 import com.lululu.O2O.util.PathUtil;
@@ -65,7 +66,7 @@ public class ShopManagementController {
 		} catch(Exception e) {
 			modelMap.put("success", false);
 			modelMap.put("errMsg", e.getMessage());
-		}
+		} 
 		
 		return modelMap;
 	}
@@ -75,6 +76,15 @@ public class ShopManagementController {
 	private Map<String, Object> registerShop(HttpServletRequest request) {
 		
 		Map<String, Object> modelMap = new HashMap<String, Object>();
+		
+		// verify captcha
+		if (!CodeUtil.checkVerifyCode(request)) {
+			modelMap.put("success", false);
+			modelMap.put("errMsg", "Captcha you entered is incorrect!");
+			return modelMap;
+		}
+		
+		
 		
 		// 1. receive and process params, including shop info and shop img
 		// 1.1 process shop info
