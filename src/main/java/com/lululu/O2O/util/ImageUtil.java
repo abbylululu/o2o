@@ -118,4 +118,24 @@ public class ImageUtil {
 		
 	}
 	
+	/**
+	 * if store path is file, then delete file
+	 * if store path is directory, then delete all files under the directory
+	 * @param storePath
+	 */
+	public static void deleteFileOrPath(String storePath) {
+		
+		File fileOrPath = new File(PathUtil.getImgBasePath() + storePath);
+		if (fileOrPath.exists()) {
+			if (fileOrPath.isDirectory()) {
+				File files[] = fileOrPath.listFiles();
+				for (int i = 0; i < files.length; i++) {
+					files[i].delete();
+				}
+			}
+			fileOrPath.delete();
+		}
+		
+	}
+	
 }
