@@ -3,6 +3,7 @@ package com.lululu.O2O.service.impl;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import com.lululu.O2O.enums.ShopStateEnum;
 import com.lululu.O2O.exceptions.ShopOperationException;
 import com.lululu.O2O.service.ShopService;
 import com.lululu.O2O.util.ImageUtil;
+import com.lululu.O2O.util.PageCalculator;
 import com.lululu.O2O.util.PathUtil;
 
 @Service
@@ -113,6 +115,25 @@ public class ShopServiceImpl implements ShopService {
 				throw new ShopOperationException("modify shop error:" + e.getMessage());
 			}
 		}
+
+	}
+
+	@Override
+	public ShopExecution getShopList(Shop shopCondition, int pageIndex, int pageSize) {
+		
+		// change pageIndex into rowIndex, to adapt to myBatis
+		int rowIndex = PageCalculator.calculateRowIndex(pageIndex, pageSize);
+		List<Shop> shopList = shopDao.queryShopList(shopCondition, rowIndex, pageSize);
+		int count = shopDao.queryShopCount(shopCondition);
+		ShopExecution se = new ShopExecution();
+		if (shopList != null) {
+			se.setShopList(shopList);
+			se.setCount(count);
+		}
+		else {
+			se.setState(ShopStateEnum.INNER_ERROR.getState());
+		}
+		return se;
 
 	}
 

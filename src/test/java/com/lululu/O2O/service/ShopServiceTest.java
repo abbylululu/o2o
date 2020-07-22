@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,6 +28,7 @@ public class ShopServiceTest extends BaseTest {
 	private ShopService shopService;
 	
 	@Test
+	@Ignore
 	public void testModifyShop() throws ShopOperationException, FileNotFoundException {
 		Shop shop = new Shop();
 		shop.setShopId(48L);
@@ -68,6 +70,18 @@ public class ShopServiceTest extends BaseTest {
 		ShopExecution se = shopService.addShop(shop, is, shopImg.getName());
 		assertEquals(ShopStateEnum.CHECK.getState(), se.getState());
 		
+	}
+	
+	@Test
+	public void testGetShopList() {
+		Shop shopCondition = new Shop();
+		ShopCategory sc = new ShopCategory();
+		sc.setShopCategoryId(1L);
+		shopCondition.setShopCategory(sc);
+		
+		ShopExecution se = shopService.getShopList(shopCondition, 2, 5);
+		System.out.println("queried counts of shop list" + se.getShopList().size());
+		System.out.println("shop counts" + se.getCount());
 	}
 
 }

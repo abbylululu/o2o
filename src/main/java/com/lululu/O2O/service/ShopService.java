@@ -26,4 +26,13 @@ public interface ShopService {
 	 * @return
 	 */
 	ShopExecution modifyShop(Shop shop, InputStream shopImgInputStream, String fileName) throws ShopOperationException;
+	
+	/**
+	 * based on shopCondition, return shop list with pagination
+	 * @param shopCondition
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
+	public ShopExecution getShopList(Shop shopCondition, int pageIndex, int pageSize);
 }
