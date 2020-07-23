@@ -21,6 +21,11 @@ public enum ProductCategoryStateEnum {
 		return stateInfo;
 	}
 
+	/**
+	 * return state info by state
+	 * @param index
+	 * @return
+	 */
 	public static ProductCategoryStateEnum stateOf(int index) {
 		for (ProductCategoryStateEnum state : values()) {
 			if (state.getState() == index) {

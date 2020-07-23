@@ -1,6 +1,6 @@
 $(function() {
 	var listUrl = '/O2O/shopadmin/getproductcategorylist';
-	var addUrl = '/O2O/shopadmin/addproductcategorys';
+	var addUrl = '/O2O/shopadmin/addproductcategories';
 	var deleteUrl = '/O2O/shopadmin/removeproductcategory';
 	getList();
 	function getList() {
@@ -32,7 +32,7 @@ $(function() {
 							}
 						});
 	}
-	$('#new')
+	$('#new') /*create one new line on every click*/
 			.click(
 					function() {
 						var tempHtml = '<div class="row row-product-category temp">'
@@ -43,7 +43,7 @@ $(function() {
 						$('.category-wrap').append(tempHtml);
 					});
 	$('#submit').click(function() {
-		var tempArr = $('.temp');
+		var tempArr = $('.temp'); /*only include new lines*/
 		var productCategoryList = [];
 		tempArr.map(function(index, item) {
 			var tempObj = {};
@@ -61,7 +61,7 @@ $(function() {
 			success : function(data) {
 				if (data.success) {
 					$.toast('Success！');
-					getList();
+					getList(); /*reorder the product category list*/
 				} else {
 					$.toast('Submit Failed！');
 				}
@@ -69,13 +69,13 @@ $(function() {
 		});
 	});
 
-	$('.category-wrap').on('click', '.row-product-category.temp .delete',
+	$('.category-wrap').on('click', '.row-product-category.temp .delete', /*categories just added, delete directly on the frontend*/
 			function(e) {
 				console.log($(this).parent().parent());
 				$(this).parent().parent().remove();
 
 			});
-	$('.category-wrap').on('click', '.row-product-category.now .delete',
+	$('.category-wrap').on('click', '.row-product-category.now .delete', /*send delete request to the backend, and delete from db*/
 			function(e) {
 				var target = e.currentTarget;
 				$.confirm('Are you sure?', function() {
