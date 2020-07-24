@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lululu.O2O.BaseTest;
+import com.lululu.O2O.dto.ImageHolder;
 import com.lululu.O2O.dto.ShopExecution;
 import com.lululu.O2O.entity.Area;
 import com.lululu.O2O.entity.PersonInfo;
@@ -36,7 +37,8 @@ public class ShopServiceTest extends BaseTest {
 		
 		File shopImg = new File("/Users/lululumi/Pictures/cloud.jpg");
 		InputStream is = new FileInputStream(shopImg);
-		ShopExecution shopExecution = shopService.modifyShop(shop, is, "cloud.jpg");
+		ImageHolder imageHolder = new ImageHolder("cloud.jpg", is);
+		ShopExecution shopExecution = shopService.modifyShop(shop, imageHolder);
 		System.out.println("new shop addr: " + shopExecution.getShop().getShopImg());
 	}
 	
@@ -67,7 +69,8 @@ public class ShopServiceTest extends BaseTest {
 	
 		File shopImg = new File("/Users/lululumi/Pictures/cloud.jpg");
 		InputStream is = new FileInputStream(shopImg);
-		ShopExecution se = shopService.addShop(shop, is, shopImg.getName());
+		ImageHolder imageHolder = new ImageHolder(shopImg.getName(), is);
+		ShopExecution se = shopService.addShop(shop, imageHolder);
 		assertEquals(ShopStateEnum.CHECK.getState(), se.getState());
 		
 	}

@@ -3,13 +3,14 @@ package com.lululu.O2O.service;
 import java.io.File;
 import java.io.InputStream;
 
+import com.lululu.O2O.dto.ImageHolder;
 import com.lululu.O2O.dto.ShopExecution;
 import com.lululu.O2O.entity.Shop;
 import com.lululu.O2O.exceptions.ShopOperationException;
 
 public interface ShopService {
 
-	ShopExecution addShop(Shop shop, InputStream shopImgInputStream, String fileName) throws ShopOperationException;
+	ShopExecution addShop(Shop shop, ImageHolder thumbnail) throws ShopOperationException;
 	
 	/**
 	 * get shop info by shop id
@@ -25,7 +26,7 @@ public interface ShopService {
 	 * @param fileName
 	 * @return
 	 */
-	ShopExecution modifyShop(Shop shop, InputStream shopImgInputStream, String fileName) throws ShopOperationException;
+	ShopExecution modifyShop(Shop shop, ImageHolder thumbnail) throws ShopOperationException;
 	
 	/**
 	 * based on shopCondition, return shop list with pagination
