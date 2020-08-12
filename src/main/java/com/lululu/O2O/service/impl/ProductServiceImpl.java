@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
 		pe.setProductList(productList);
 		pe.setCount(count);
 		return pe;
-		
+
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
 			productImg.setCreateTime(new Date());
 			productImgList.add(productImg);
 		}
-		
+
 		if (productImgList.size() > 0) {
 			try {
 				int effectedNum = productImgDao.batchInsertProductImg(productImgList);
@@ -123,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
 				throw new ProductOperationException("Product img creation failed:" + e.toString());
 			}
 		}
-		
+
 	}
 
 	/**
@@ -141,13 +141,38 @@ public class ProductServiceImpl implements ProductService {
 
 		// delete data in db
 		productImgDao.deleteProductImgByProductId(productId);
-		
+
 	}
 
 	@Override
 	public ProductExecution modifyProduct(Product product, ImageHolder thumbnail,
 			List<ImageHolder> productImgHolderList) throws ProductOperationException {
-		// TODO Auto-generated method stub
-		return null;
+		if (product != null && product.getShop() != null && product.getShop().getShopId() != null) {
+			product.setLastEditTime(new Date());
+			if (thumbnail != null) {
+				// get the original info
+				Product tempProduct = productDao.queryProductById(product.getProductId());
+				if (tempProduct.getImgAddr() != null) {
+					ImageUtil.deleteFileOrPath(tempProduct.getImgAddr());
+				}
+				addThumbnail(product, thumbnail);
+			}
+			// if there is new product img uploaded, delete the origin first
+			if (productImgHolderList != null && productImgHolderList.size() > 0) {
+				deleteProductImgList(product.getProductId());
+				addProductImgList(product, productImgHolderList);
+			}
+			try {
+				int effectedNum = productDao.updateProduct(product);
+				if (effectedNum <= 0) {
+					throw new ProductOperationException("Update product info failed");
+				}
+				return new ProductExecution(ProductStateEnum.SUCCESS, product);
+			} catch (Exception e) {
+				throw new ProductOperationException("Update product info failed:" + e.toString());
+			}
+		} else {
+			return new ProductExecution(ProductStateEnum.EMPTY);
+		}
 	}
 }
