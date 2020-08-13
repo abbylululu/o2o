@@ -224,4 +224,63 @@ public class ProductManagementController {
 		}
 		return modelMap;
 	}
+	
+	/**
+	 * get product list by shop Id
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getproductlistbyshop", method = RequestMethod.GET)
+	@ResponseBody
+	private Map<String, Object> getProductListByShop(HttpServletRequest request) {
+		Map<String, Object> modelMap = new HashMap<String, Object>();
+
+		int pageIndex = HttpServletRequestUtil.getInt(request, "pageIndex");
+		int pageSize = HttpServletRequestUtil.getInt(request, "pageSize");
+
+		Shop currentShop = (Shop) request.getSession().getAttribute("currentShop");
+
+		if ((pageIndex > -1) && (pageSize > -1) && (currentShop != null) && (currentShop.getShopId() != null)) {
+
+			long productCategoryId = HttpServletRequestUtil.getLong(request, "productCategoryId");
+			String productName = HttpServletRequestUtil.getString(request, "productName");
+			Product productCondition = compactProductCondition(currentShop.getShopId(), productCategoryId, productName);
+
+			ProductExecution pe = productService.getProductList(productCondition, pageIndex, pageSize);
+			modelMap.put("productList", pe.getProductList());
+			modelMap.put("count", pe.getCount());
+			modelMap.put("success", true);
+		} else {
+			modelMap.put("success", false);
+			modelMap.put("errMsg", "empty pageSize or pageIndex or shopId");
+		}
+		return modelMap;
+	}
+	
+	/**
+	 * wrap look up condition into Product instance
+	 * 
+	 * @param shopId(mandatory)
+	 * @param productCategoryId(optional)
+	 * @param productName(optional)
+	 * @return
+	 */
+	private Product compactProductCondition(long shopId, long productCategoryId, String productName) {
+		Product productCondition = new Product();
+		Shop shop = new Shop();
+		shop.setShopId(shopId);
+		productCondition.setShop(shop);
+
+		if (productCategoryId != -1L) {
+			ProductCategory productCategory = new ProductCategory();
+			productCategory.setProductCategoryId(productCategoryId);
+			productCondition.setProductCategory(productCategory);
+		}
+
+		if (productName != null) {
+			productCondition.setProductName(productName);
+		}
+		return productCondition;
+	}
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lululu.O2O.dao.ProductCategoryDao;
+import com.lululu.O2O.dao.ProductDao;
 import com.lululu.O2O.dto.ProductCategoryExecution;
 import com.lululu.O2O.entity.ProductCategory;
 import com.lululu.O2O.enums.ProductCategoryStateEnum;
@@ -18,6 +19,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
 	@Autowired
 	private ProductCategoryDao productCategoryDao; 
+	
+	@Autowired
+	private ProductDao productDao;
 	
 	@Override
 	public List<ProductCategory> getProductCategoryList(long shopId) {
@@ -54,6 +58,15 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 			throws ProductCategoryOperationException {
 		
 		// TODO: firstly set all product category id of all products under denoted category as null
+		try {
+			int effectedNum = productDao.updateProductCategoryToNull(productCategoryId);
+			if (effectedNum < 0) {
+				throw new ProductCategoryOperationException("Product category update failed.");
+			}
+		} catch (Exception e) {
+			throw new ProductCategoryOperationException("deleteProductCategory error:" + e.getMessage());
+		}
+		
 		try {
 			int effectedNum = productCategoryDao.deleteProductCategory(productCategoryId, shopId);
 			if (effectedNum <= 0) {
