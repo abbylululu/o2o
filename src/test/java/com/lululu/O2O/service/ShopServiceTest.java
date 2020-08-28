@@ -43,7 +43,6 @@ public class ShopServiceTest extends BaseTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testAddShop() throws FileNotFoundException {
 		
 		Shop shop = new Shop();
@@ -52,27 +51,26 @@ public class ShopServiceTest extends BaseTest {
 		Area area = new Area();
 		ShopCategory shopCategory = new ShopCategory();
 		
-		owner.setUserId(1L);
+		owner.setUserId(13L);
 		area.setAreaId(2);
-		shopCategory.setShopCategoryId(1L);
+		shopCategory.setShopCategoryId(38L);
 		
 		shop.setOwner(owner);
 		shop.setArea(area);
 		shop.setShopCategory(shopCategory);
-		shop.setShopName("Test Shop3");
-		shop.setShopDesc("test3");
-		shop.setShopAddr("test3");
-		shop.setPhone("test3");
+		shop.setShopName("Test Bear shop 2");
+		shop.setShopDesc("test bear shop 2 desc");
+		shop.setShopAddr("test bear shop 2 addr");
+		shop.setPhone("test");
 		shop.setCreateTime(new Date());
 		shop.setEnableStatus(ShopStateEnum.CHECK.getState());
 		shop.setAdvice("verifying");
 	
-		File shopImg = new File("/Users/lululumi/Pictures/cloud.jpg");
+		File shopImg = new File("/Users/lululumi/Pictures/bear/all-bears-prints.jpg");
 		InputStream is = new FileInputStream(shopImg);
 		ImageHolder imageHolder = new ImageHolder(shopImg.getName(), is);
 		ShopExecution se = shopService.addShop(shop, imageHolder);
 		assertEquals(ShopStateEnum.CHECK.getState(), se.getState());
-		
 	}
 	
 	@Test

@@ -59,6 +59,8 @@ public class ShopManagementController {
 		List<Area> areaList = new ArrayList<Area>();
 		
 		try {
+			// by passing a ShopCategory object
+			// will return all shop category info with parent id not null
 			shopCategoryList = shopCategoryService.getShopCategoryList(new ShopCategory());
 			areaList = areaService.getAreaList();
 			modelMap.put("shopCategoryList", shopCategoryList);
@@ -260,7 +262,7 @@ public class ShopManagementController {
 		
 		// TODO: fake user session, for testing
 		PersonInfo user = new PersonInfo();
-		user.setUserId(1L); 
+		user.setUserId(13L); 
 		user.setName("ttttest");
 		request.getSession().setAttribute("user", user);
 		user = (PersonInfo) request.getSession().getAttribute("user");
