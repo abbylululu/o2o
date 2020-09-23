@@ -30,21 +30,42 @@ public class ShopDaoTest extends BaseTest {
 		
 		owner.setUserId(13L);
 		area.setAreaId(2);
-		shopCategory.setShopCategoryId(38L);
+		shopCategory.setShopCategoryId(43L);
 		
 		shop.setOwner(owner);
 		shop.setArea(area);
 		shop.setShopCategory(shopCategory);
-		shop.setShopName("Test Bear Shop");
-		shop.setShopDesc("test bear shop");
-		shop.setShopAddr("test bear shop addr");
+		shop.setShopName("A New Page");
+		shop.setShopDesc("An on-line bookstore");
+		shop.setShopAddr("test on-line book shop addr");
 		shop.setPhone("test");
 		shop.setShopImg("test");
 		shop.setCreateTime(new Date());
 		shop.setEnableStatus(0);
 		shop.setAdvice("verifying");
+		shop.setShopImg("/Users/lululumi/Pictures/upload/on-line.jpg");
 		
 		int effectedNum = shopDao.insertShop(shop);
+		assertEquals(1, effectedNum);
+		
+		owner.setUserId(13L);
+		area.setAreaId(1);
+		shopCategory.setShopCategoryId(44L);
+		
+		shop.setOwner(owner);
+		shop.setArea(area);
+		shop.setShopCategory(shopCategory);
+		shop.setShopName("Turn the Page");
+		shop.setShopDesc("An off-line bookstore");
+		shop.setShopAddr("test off-line book shop addr");
+		shop.setPhone("test");
+		shop.setShopImg("test");
+		shop.setCreateTime(new Date());
+		shop.setEnableStatus(0);
+		shop.setAdvice("verifying");
+		shop.setShopImg("/Users/lululumi/Pictures/upload/off-line.jpg");
+		
+		effectedNum = shopDao.insertShop(shop);
 		assertEquals(1, effectedNum);
 	}
 	
@@ -95,10 +116,10 @@ public class ShopDaoTest extends BaseTest {
 		Shop shopCondition = new Shop();
 		ShopCategory childCategory = new ShopCategory();
 		ShopCategory parentCategory = new ShopCategory();
-		parentCategory.setShopCategoryId(1L);
+		parentCategory.setShopCategoryId(42L);
 		childCategory.setParent(parentCategory);
 		shopCondition.setShopCategory(childCategory);
-		List<Shop> shopList = shopDao.queryShopList(shopCondition, 0, 5);
+		List<Shop> shopList = shopDao.queryShopList(shopCondition, 2, 5);
 		int count = shopDao.queryShopCount(shopCondition);
 		System.out.println("size：" + shopList.size());
 		System.out.println("count：" + count);		

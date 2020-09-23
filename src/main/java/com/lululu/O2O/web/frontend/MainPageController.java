@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lululu.O2O.entity.HeadLine;
 import com.lululu.O2O.entity.ShopCategory;
-import com.lululu.O2O.service.HeadLineService;
 import com.lululu.O2O.service.ShopCategoryService;
 
 @Controller
@@ -21,8 +20,6 @@ import com.lululu.O2O.service.ShopCategoryService;
 public class MainPageController {
 	@Autowired
 	private ShopCategoryService shopCategoryService;
-	@Autowired
-	private HeadLineService headLineService;
 
 	/**
 	 * get the headline list, and first-level shop category
@@ -38,18 +35,6 @@ public class MainPageController {
 			// get the first-level shop category
 			shopCategoryList = shopCategoryService.getShopCategoryList(null);
 			modelMap.put("shopCategoryList", shopCategoryList);
-		} catch (Exception e) {
-			modelMap.put("success", false);
-			modelMap.put("errMsg", e.getMessage());
-			return modelMap;
-		}
-		List<HeadLine> headLineList = new ArrayList<HeadLine>();
-		try {
-			// get the headline list whose enable status is 1
-			HeadLine headLineCondition = new HeadLine();
-			headLineCondition.setEnableStatus(1);
-			headLineList = headLineService.getHeadLineList(headLineCondition);
-			modelMap.put("headLineList", headLineList);
 		} catch (Exception e) {
 			modelMap.put("success", false);
 			modelMap.put("errMsg", e.getMessage());

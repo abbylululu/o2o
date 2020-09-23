@@ -2,22 +2,6 @@ $(function() {
 	var url = '/O2O/frontend/listmainpageinfo';
 	$.getJSON(url, function(data) {
 		if (data.success) {
-			var headLineList = data.headLineList;
-			var swiperHtml = '';
-			// construct the carousel
-			headLineList.map(function(item, index) {
-				swiperHtml += '' + '<div class="swiper-slide img-wrap">'
-						+ '<a href="' + item.lineLink
-						+ '" external><img class="banner-img" src="' + item.lineImg
-						+ '" alt="' + item.lineName + '"></a>' + '</div>';
-			});
-			$('.swiper-wrapper').html(swiperHtml);
-			// carousel changes every 3 minutes
-			$(".swiper-container").swiper({
-				autoplay : 3000,
-				autoplayDisableOnInteraction : false
-			});
-
 			var shopCategoryList = data.shopCategoryList;
 			var categoryHtml = '';
 			// construct first-level shop category

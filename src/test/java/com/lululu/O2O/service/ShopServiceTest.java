@@ -43,6 +43,7 @@ public class ShopServiceTest extends BaseTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testAddShop() throws FileNotFoundException {
 		
 		Shop shop = new Shop();
@@ -53,20 +54,20 @@ public class ShopServiceTest extends BaseTest {
 		
 		owner.setUserId(13L);
 		area.setAreaId(2);
-		shopCategory.setShopCategoryId(38L);
+		shopCategory.setShopCategoryId(44L);
 		
 		shop.setOwner(owner);
 		shop.setArea(area);
 		shop.setShopCategory(shopCategory);
-		shop.setShopName("Test Bear shop 2");
-		shop.setShopDesc("test bear shop 2 desc");
+		shop.setShopName("Turn the Page");
+		shop.setShopDesc("An off-line book store");
 		shop.setShopAddr("test bear shop 2 addr");
 		shop.setPhone("test");
 		shop.setCreateTime(new Date());
 		shop.setEnableStatus(ShopStateEnum.CHECK.getState());
 		shop.setAdvice("verifying");
 	
-		File shopImg = new File("/Users/lululumi/Pictures/bear/all-bears-prints.jpg");
+		File shopImg = new File("/Users/lululumi/Pictures/upload/off-line.jpg");
 		InputStream is = new FileInputStream(shopImg);
 		ImageHolder imageHolder = new ImageHolder(shopImg.getName(), is);
 		ShopExecution se = shopService.addShop(shop, imageHolder);
@@ -74,13 +75,16 @@ public class ShopServiceTest extends BaseTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testGetShopList() {
 		Shop shopCondition = new Shop();
+		ShopCategory parent = new ShopCategory();
+		parent.setShopCategoryId(42L);
 		ShopCategory sc = new ShopCategory();
-		sc.setShopCategoryId(1L);
+		sc.setParent(parent);
 		shopCondition.setShopCategory(sc);
 		
-		ShopExecution se = shopService.getShopList(shopCondition, 2, 5);
+		ShopExecution se = shopService.getShopList(shopCondition, 0, 5);
 		System.out.println("queried counts of shop list" + se.getShopList().size());
 		System.out.println("shop counts" + se.getCount());
 	}
