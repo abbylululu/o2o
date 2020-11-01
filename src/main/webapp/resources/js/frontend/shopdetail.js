@@ -123,7 +123,7 @@ $(function() {
 			'.card',
 			function(e) {
 				var productId = e.currentTarget.dataset.productId;
-				window.location.href = '/o2o/frontend/productdetail?productId='
+				window.location.href = '/O2O/frontend/productdetail?productId='
 						+ productId;
 			});
 
