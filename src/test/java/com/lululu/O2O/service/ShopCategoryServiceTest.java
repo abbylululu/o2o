@@ -19,7 +19,7 @@ public class ShopCategoryServiceTest extends BaseTest {
 	public void testGetShopCategoryList() {
 		
 		List<ShopCategory> shopCategoryList = shopCategoryService.getShopCategoryList(null);
-		assertEquals(7, shopCategoryList.size());
+		assertEquals(4, shopCategoryList.size());
 		
 	}
 	
